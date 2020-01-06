@@ -1,5 +1,9 @@
 package bgu.spl.net.srv;
 
+import bgu.spl.net.impl.command.ClientFrames.ClientFrame;
+import bgu.spl.net.impl.command.ServerFrames.ServerFrame;
+
+import java.awt.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,8 +40,11 @@ public class ConnectionsImp<T> implements Connections {
      */
     @Override
     public void send(String channel, Object msg) {
-
+      for (User tmp : bookClub.getUsersByGenre(channel)){
+         send(tmp.getUserId(), msg);
+      }
     }
+
 
     /**
      * Removes

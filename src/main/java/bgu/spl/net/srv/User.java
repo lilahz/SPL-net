@@ -10,7 +10,7 @@ public class User {
     private final String userName;
     private final String password;
     private int port;
-    private Map<String, String> genreById;
+    private Map<String, String> genreById; // < id , genre >
     private boolean isActive;
 
     public User(int userId, String userName, String password, int port) {
@@ -52,8 +52,8 @@ public class User {
         genreById.put(subsId, genre);
     }
 
-    public void unsubscribe(String subsId, String genre) {
-        genreById.remove(subsId, genre);
+    public void unsubscribe(String subsId) {
+        genreById.remove(subsId);
     }
 
     public String getSubscriptionId(String genre) {
@@ -64,4 +64,15 @@ public class User {
         }
         return null;
     }
+
+    public String getGenreById(String subscriptionId) {
+        return genreById.get(subscriptionId);
+    }
+
+    public void unSubscribeAll(){
+        genreById.clear();
+
+    }
+
+
 }

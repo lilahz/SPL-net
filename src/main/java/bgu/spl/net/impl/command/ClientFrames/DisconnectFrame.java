@@ -3,25 +3,27 @@ package bgu.spl.net.impl.command.ClientFrames;
 import bgu.spl.net.impl.command.ServerFrames.ReceiptFrame;
 import bgu.spl.net.srv.BookClub;
 import bgu.spl.net.srv.ConnectionsImp;
+import bgu.spl.net.srv.User;
 
-public class UnsubscribeFrame implements ClientFrame {
+public class DisconnectFrame implements ClientFrame {
 
-    private BookClub bookClub = BookClub.getInstance();
-    private String subsId;
     private String receiptId;
-    private ConnectionsImp<String> connections;
+    private BookClub bookClub = BookClub.getInstance();
+    private ConnectionsImp connections;
 
-    public UnsubscribeFrame(String subsId, String receiptId) {
-        this.subsId = subsId;
+    public DisconnectFrame(String receiptId){
         this.receiptId = receiptId;
     }
 
+
+
     @Override
     public void execute(int connectionId) {
-        String genre = bookClub.getUser(connectionId).getGenreById(subsId);
-        bookClub.exitGenre(genre, bookClub.getUser(subsId));
-        bookClub.getUser(connectionId).unsubscribe(subsId);
+        User tmpUser = bookClub.getUser(connectionId);
+        tmpUser.unSubscribeAll();
+        bookClub.removeUser(tmpUser);
         connections.send(connectionId, new ReceiptFrame(receiptId));
+
     }
 
     @Override

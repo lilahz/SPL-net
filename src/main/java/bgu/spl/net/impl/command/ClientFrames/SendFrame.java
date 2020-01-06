@@ -21,16 +21,7 @@ public class SendFrame implements ClientFrame {
     public void execute(int connectionId) {
         String[] message = this.message.split(" ");
         String subsId = bookClub.getUser(connectionId).getSubscriptionId(genre);
-        // If add command has been sent
-        if (message[2] == "added") {
-            connections.send(connectionId, new MessageFrame(subsId, genre, this.message));
-        }
-        else if (message[3] == "borrow") {
-            connections.send(connectionId, new MessageFrame(subsId, genre, this.message));
-        }
-        else if (message[0] == "Taking") {
-            connections.send(connectionId, new MessageFrame(subsId, genre, this.message));
-        }
+        connections.send(genre, new MessageFrame(subsId , genre , this.message));
     }
 
     @Override

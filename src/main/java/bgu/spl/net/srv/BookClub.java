@@ -7,15 +7,13 @@ import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BookClub {
-    private Map<String, List<User>> usersPerGenre;
+    private Map<String, List<User>> usersPerGenre; // < genre , users >
     private List<User> users;
-    private Map<String, String> subsIdMap;
-
 
     private BookClub() {
         this.usersPerGenre = new ConcurrentHashMap<>();
         this.users = new LinkedList<>();
-        this.subsIdMap = new ConcurrentHashMap<>();
+
     }
 
     //TODO: change name
@@ -28,7 +26,7 @@ public class BookClub {
     }
 
     public User getUser(String userName) {
-        for (User user: users) {
+        for (User user : users) {
             if (user.getUserName() == userName)
                 return user;
         }
@@ -36,7 +34,7 @@ public class BookClub {
     }
 
     public User getUser(int userId) {
-        for (User user: users) {
+        for (User user : users) {
             if (user.getUserId() == userId)
                 return user;
         }
@@ -49,7 +47,7 @@ public class BookClub {
 
     public void removeUser(User user) {
         // Remove the user from each genre list
-        for (String genre: usersPerGenre.keySet()) {
+        for (String genre : usersPerGenre.keySet()) {
             usersPerGenre.get(genre).remove(user);
         }
 
@@ -65,16 +63,7 @@ public class BookClub {
         usersPerGenre.get(genre).remove(user);
     }
 
-    public void addSubscription(String subsId, String genre){
-        subsIdMap.put(subsId, genre);
+    public List<User> getUsersByGenre(String genre){
+        return usersPerGenre.get(genre);
     }
-
-    public void removeSubscription(String subsId, String genre){
-        subsIdMap.remove(subsId, genre);
-    }
-
-    public String getGenreById(String subscriptionId) {
-        return subsIdMap.get(subscriptionId);
-    }
-
 }

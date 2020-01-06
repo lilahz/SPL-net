@@ -23,8 +23,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
         if (nextByte == '\0') {
             String msg = new String(bytes, 0, bytes.length, StandardCharsets.UTF_8);
             length = 0;
-
-//            return msg;
+            return createFrame(msg);
         }
         pushByte(nextByte);
         return null;
@@ -32,7 +31,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
 
     @Override
     public byte[] encode(Object message) {
-        return (message + "\n").getBytes();
+        return (((ServerFrame)message).toFrame() + "\n").getBytes();
     }
 
     public void pushByte(byte nextByte) {
@@ -82,6 +81,11 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
             // TODO: understand if to use 2 or 3
             message = msgSplit[2];
             return (new SendFrame(genre, message));
+        }
+        else if (frameType == "DISCONNECT"){
+         receiptId = msgSplit[1].split(":")[1];
+         return (new DisconnectFrame(receiptId));
+
         }
         return null;
     }
