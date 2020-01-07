@@ -2,12 +2,13 @@ package bgu.spl.net.impl.stomp;
 
 import bgu.spl.net.api.StompMessagingProtocol;
 import bgu.spl.net.impl.command.ClientFrames.ClientFrame;
+import bgu.spl.net.impl.command.ClientFrames.ConnectFrame;
 import bgu.spl.net.srv.BookClub;
 import bgu.spl.net.srv.Connections;
 import bgu.spl.net.srv.ConnectionsImp;
 
 public class StompMessagingProtocolImp<T> implements StompMessagingProtocol<T> {
-
+    private static boolean userActive = false;
     private BookClub bookClub = BookClub.getInstance();
     private int connectionId;
     private Connections<String> connections;
@@ -23,10 +24,14 @@ public class StompMessagingProtocolImp<T> implements StompMessagingProtocol<T> {
 
     @Override
     public void process(Object message) {
-        ((ClientFrame)message).setConnections((ConnectionsImp<String>) connections);
-        ((ClientFrame)message).execute(connectionId);
 
-//        if (message instanceof ){
+        if (message instanceof ConnectFrame | userActive) {
+
+            ((ClientFrame) message).setConnections((ConnectionsImp<String>) connections);
+            ((ClientFrame) message).execute(connectionId);
+
+        }
+//        if (message instanceof DisconnectFrame ){
 //            //TODO : implement this.
 //        }
 
@@ -36,5 +41,9 @@ public class StompMessagingProtocolImp<T> implements StompMessagingProtocol<T> {
     @Override
     public boolean shouldTerminate() {
         return shouldTerminate;
+    }
+
+    public static void setUserActive(){
+        userActive = true;
     }
 }
