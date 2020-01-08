@@ -54,4 +54,8 @@ public class ConnectionsImp<T> implements Connections {
     public void disconnect(int connectionId) {
 
     }
+
+    public void addConnection(int connectionId, ConnectionHandler connection) {
+        connections.put(connectionId, connection);
+    }
 }

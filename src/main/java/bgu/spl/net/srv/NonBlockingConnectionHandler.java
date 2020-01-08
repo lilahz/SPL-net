@@ -3,6 +3,7 @@ package bgu.spl.net.srv;
 import bgu.spl.net.api.MessageEncoderDecoder;
 import bgu.spl.net.api.MessagingProtocol;
 import bgu.spl.net.api.StompMessagingProtocol;
+import bgu.spl.net.impl.command.ServerFrames.ServerFrame;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -10,6 +11,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
 
@@ -26,11 +28,14 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
             MessageEncoderDecoder<T> reader,
             StompMessagingProtocol<T> protocol,
             SocketChannel chan,
-            Reactor reactor) {
+            Reactor reactor,
+            int connectionId,
+            ConnectionsImp connections) {
         this.chan = chan;
         this.encdec = reader;
         this.protocol = protocol;
         this.reactor = reactor;
+        protocol.start(connectionId, connections);
     }
 
     public Runnable continueRead() {
@@ -52,6 +57,7 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
                         if (nextMessage != null) {
                              protocol.process(nextMessage);
                         }
+
                     }
                 } finally {
                     releaseBuffer(buf);

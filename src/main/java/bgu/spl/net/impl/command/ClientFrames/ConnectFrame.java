@@ -10,14 +10,12 @@ public class ConnectFrame implements ClientFrame {
 
     private BookClub bookClub = BookClub.getInstance();
     private String version;
-    private int port;
     private String userName;
     private String password;
     private ConnectionsImp<String> connections;
 
-    public ConnectFrame(String version, int port, String userName, String password) {
+    public ConnectFrame(String version, String userName, String password) {
         this.version = version;
-        this.port = port;
         this.userName = userName;
         this.password = password;
     }
@@ -46,7 +44,7 @@ public class ConnectFrame implements ClientFrame {
         }
         // If user does not exist
         else {
-            bookClub.addUser(new User(connectionId, userName, password, port));
+            bookClub.addUser(new User(connectionId, userName, password));
             connections.send(connectionId, new ConnectedFrame(version));
         }
     }

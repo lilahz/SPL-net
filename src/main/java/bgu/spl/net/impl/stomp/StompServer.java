@@ -10,7 +10,7 @@ public class StompServer {
     public static void main(String[] args) {
         int port = Integer.parseInt(args[0]);
 
-        if (args[1] == "tpc") {
+        if (args[1].equals("tpc")) {
             Server server = Server.threadPerClient(
                     port,
                     () -> new StompMessagingProtocolImp<>(),
@@ -19,7 +19,7 @@ public class StompServer {
             server.serve();
         }
 
-        else if (args[1] == "reactor") {
+        else if (args[1].equals("reactor")) {
 
             Server server = Server.reactor(
                     Runtime.getRuntime().availableProcessors(),
@@ -27,6 +27,7 @@ public class StompServer {
                     () -> new StompMessagingProtocolImp<>(),
                     () -> new MessageEncoderDecoderImp()
             );
+            server.serve();
         }
 
 

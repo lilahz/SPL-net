@@ -7,6 +7,7 @@ import bgu.spl.net.api.StompMessagingProtocol;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 public abstract class BaseServer<T> implements Server<T> {
@@ -15,6 +16,8 @@ public abstract class BaseServer<T> implements Server<T> {
     private final Supplier<StompMessagingProtocol<T>> protocolFactory;
     private final Supplier<MessageEncoderDecoder<T>> encdecFactory;
     private ServerSocket sock;
+    private ConnectionsImp connections;
+    private AtomicInteger connectionId;
 
     public BaseServer(
             int port,
@@ -25,6 +28,7 @@ public abstract class BaseServer<T> implements Server<T> {
         this.protocolFactory = protocolFactory;
         this.encdecFactory = encdecFactory;
 		this.sock = null;
+		connectionId = new AtomicInteger(0);
     }
 
     @Override
@@ -42,8 +46,15 @@ public abstract class BaseServer<T> implements Server<T> {
                 BlockingConnectionHandler<T> handler = new BlockingConnectionHandler<>(
                         clientSock,
                         encdecFactory.get(),
-                        protocolFactory.get());
-
+                        protocolFactory.get(),
+                        connectionId.intValue(),
+                        connections);
+                connections.addConnection(connectionId.intValue(), handler);
+                int oldVal, newVal;
+                do {
+                    oldVal = connectionId.intValue();
+                    newVal = connectionId.intValue() + 1;
+                } while(!connectionId.compareAndSet(oldVal, newVal));
                 execute(handler);
             }
         } catch (IOException ex) {

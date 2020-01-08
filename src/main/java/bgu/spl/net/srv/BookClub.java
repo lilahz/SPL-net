@@ -56,6 +56,10 @@ public class BookClub {
     }
 
     public void joinGenre(String genre, User user) {
+        //TODO edited this
+        if (usersPerGenre.get(genre) == null){
+            usersPerGenre.put(genre, new LinkedList<>());
+        }
         usersPerGenre.get(genre).add(user);
     }
 

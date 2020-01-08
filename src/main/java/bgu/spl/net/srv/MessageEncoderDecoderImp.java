@@ -20,8 +20,10 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
     @Override
     public Object decodeNextByte(byte nextByte) {
         // TODO: understand which end byte use
-        if (nextByte == '\0') {
+        if (nextByte == '\u0000') {
             String msg = new String(bytes, 0, bytes.length, StandardCharsets.UTF_8);
+            if (msg.charAt(0)== '\n') //TODO : maybe we can remove \n at the encoder
+               msg = msg.substring(1,msg.length());
             length = 0;
             return createFrame(msg);
         }
@@ -31,7 +33,9 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
 
     @Override
     public byte[] encode(Object message) {
-        return (((ServerFrame)message).toFrame() + "\n").getBytes();
+        //TODO the message doesnt sent good to send in NBCH
+        String msg = ((ServerFrame)message).toFrame();
+        return (msg).getBytes();
     }
 
     public void pushByte(byte nextByte) {
@@ -56,33 +60,30 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
 
         String[] msgSplit = msg.split("\n");
         String frameType = msgSplit[0];
-        if (frameType == "CONNECT") {
+        if (frameType.equals("CONNECT")) {
             version = msgSplit[1].split(":")[1];
-            host = msgSplit[2].split(":")[1];
             userName = msgSplit[3].split(":")[1];
             password = msgSplit[4].split(":")[1];
-            //TODO: understand how to send the host and port to the command
-//            loginCommand.execute(this.connectionId);
-            return (new ConnectFrame(version, Integer.parseInt(host), userName, password));
+            return  (new ConnectFrame(version, userName, password));
         }
-        else if (frameType == "SUBSCRIBE") {
+        else if (frameType.equals("SUBSCRIBE")) {
             genre = msgSplit[1].split(":")[1];
             subscriptionId = msgSplit[2].split(":")[1];
             receiptId = msgSplit[3].split(":")[1];
             return (new SubscribeFrame(genre, subscriptionId, receiptId));
         }
-        else if (frameType == "UNSUBSCRIBE"){
+        else if (frameType.equals("UNSUBSCRIBE")){
             subscriptionId = msgSplit[1].split(":")[1];
             receiptId = msgSplit[2].split(":")[1];
             return (new UnsubscribeFrame(subscriptionId, receiptId));
         }
-        else if (frameType == "SEND") {
+        else if (frameType.equals("SEND")) {
             genre = msgSplit[1].split(":")[1];
             // TODO: understand if to use 2 or 3
             message = msgSplit[2];
             return (new SendFrame(genre, message));
         }
-        else if (frameType == "DISCONNECT"){
+        else if (frameType.equals("DISCONNECT")){
          receiptId = msgSplit[1].split(":")[1];
          return (new DisconnectFrame(receiptId));
 

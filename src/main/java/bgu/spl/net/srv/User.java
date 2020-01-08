@@ -9,15 +9,13 @@ public class User {
     private int userId;
     private final String userName;
     private final String password;
-    private int port;
     private Map<String, String> genreById; // < id , genre >
     private boolean isActive;
 
-    public User(int userId, String userName, String password, int port) {
+    public User(int userId, String userName, String password) {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
-        this.port = port;
         this.genreById = new ConcurrentHashMap<>();
         this.isActive = true;
     }
