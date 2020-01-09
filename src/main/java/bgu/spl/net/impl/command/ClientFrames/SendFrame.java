@@ -20,7 +20,8 @@ public class SendFrame implements ClientFrame {
     @Override
     public void execute(int connectionId) {
         String[] message = this.message.split(" ");
-        String subsId = bookClub.getUser(connectionId).getSubscriptionId(genre);
+        User tempUser = bookClub.getUser(connectionId);
+        String subsId = tempUser.getSubscriptionId(genre);
         connections.send(genre, new MessageFrame(subsId , genre , this.message));
     }
 

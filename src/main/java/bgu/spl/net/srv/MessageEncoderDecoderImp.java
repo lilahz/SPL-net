@@ -23,7 +23,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
         if (nextByte == '\u0000') {
             String msg = new String(bytes, 0, bytes.length, StandardCharsets.UTF_8);
             if (msg.charAt(0)== '\n') //TODO : maybe we can remove \n at the encoder
-               msg = msg.substring(1,msg.length());
+               msg = msg.substring(1);
             length = 0;
             return createFrame(msg);
         }
@@ -35,6 +35,8 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
     public byte[] encode(Object message) {
         //TODO the message doesnt sent good to send in NBCH
         String msg = ((ServerFrame)message).toFrame();
+        System.out.println("sending: ");
+        System.out.println(msg);
         return (msg).getBytes();
     }
 
@@ -80,7 +82,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
         else if (frameType.equals("SEND")) {
             genre = msgSplit[1].split(":")[1];
             // TODO: understand if to use 2 or 3
-            message = msgSplit[2];
+            message = msgSplit[3];
             return (new SendFrame(genre, message));
         }
         else if (frameType.equals("DISCONNECT")){

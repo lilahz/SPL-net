@@ -19,7 +19,7 @@ public class UnsubscribeFrame implements ClientFrame {
     @Override
     public void execute(int connectionId) {
         String genre = bookClub.getUser(connectionId).getGenreById(subsId);
-        bookClub.exitGenre(genre, bookClub.getUser(subsId));
+        bookClub.exitGenre(genre, bookClub.getUser(connectionId));
         bookClub.getUser(connectionId).unsubscribe(subsId);
         connections.send(connectionId, new ReceiptFrame(receiptId));
     }

@@ -21,8 +21,6 @@ public class ConnectFrame implements ClientFrame {
     }
 
     public void execute(int connectionId) {
-        //TODO: Socket error: connection error. in this case the output should be "Could not connect to server"
-
         // Search the user in the users list
         User user = bookClub.getUser(userName);
         if (user != null) {
@@ -40,6 +38,7 @@ public class ConnectFrame implements ClientFrame {
             // If the password does not match
             else {
                 connections.send(connectionId, new ErrorFrame("Wrong password"));
+                user.logout();
             }
         }
         // If user does not exist
