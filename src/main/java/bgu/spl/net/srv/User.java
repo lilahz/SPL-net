@@ -56,7 +56,7 @@ public class User {
 
     public String getSubscriptionId(String genre) {
         for (String subsId: genreById.keySet()) {
-            if (genreById.get(subsId) == genre) {
+            if (genreById.get(subsId).equals(genre)) {
                 return subsId;
             }
         }

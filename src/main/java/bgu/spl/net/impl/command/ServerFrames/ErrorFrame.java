@@ -12,7 +12,7 @@ public class ErrorFrame implements ServerFrame {
     }
 
     public String toFrame() {
-        String output = "ERROR\nmessage: "+ errorMessage + "\n\n" + '\u0000';
+        String output = "ERROR\nmessage: " + errorMessage + "\n\n" + '\u0000';
         return output;
     }
 }

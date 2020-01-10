@@ -3,7 +3,6 @@ package bgu.spl.net.srv;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BookClub {
@@ -27,7 +26,7 @@ public class BookClub {
 
     public User getUser(String userName) {
         for (User user : users) {
-            if (user.getUserName() == userName)
+            if (user.getUserName().equals(userName))
                 return user;
         }
         return null;

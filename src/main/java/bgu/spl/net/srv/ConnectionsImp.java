@@ -1,5 +1,6 @@
 package bgu.spl.net.srv;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -54,7 +55,11 @@ public class ConnectionsImp<T> implements Connections {
      */
     @Override
     public void disconnect(int connectionId) {
-
+        try {
+            connections.get(connectionId).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addConnection(int connectionId, ConnectionHandler connection) {

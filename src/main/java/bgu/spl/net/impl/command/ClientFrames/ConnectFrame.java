@@ -25,7 +25,7 @@ public class ConnectFrame implements ClientFrame {
         User user = bookClub.getUser(userName);
         if (user != null) {
             // Check if the password matches
-            if (password == user.getPassword()) {
+            if (password.equals(user.getPassword())) {
                 // Check if the user is already active
                 if (user.isActive()) {
                     connections.send(connectionId, new ErrorFrame("User already logged in"));
@@ -38,7 +38,7 @@ public class ConnectFrame implements ClientFrame {
             // If the password does not match
             else {
                 connections.send(connectionId, new ErrorFrame("Wrong password"));
-                user.logout();
+//                user.logout();
             }
         }
         // If user does not exist

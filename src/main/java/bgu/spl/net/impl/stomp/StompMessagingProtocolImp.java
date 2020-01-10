@@ -3,6 +3,7 @@ package bgu.spl.net.impl.stomp;
 import bgu.spl.net.api.StompMessagingProtocol;
 import bgu.spl.net.impl.command.ClientFrames.ClientFrame;
 import bgu.spl.net.impl.command.ClientFrames.ConnectFrame;
+import bgu.spl.net.impl.command.ClientFrames.DisconnectFrame;
 import bgu.spl.net.impl.command.ServerFrames.ErrorFrame;
 import bgu.spl.net.srv.BookClub;
 import bgu.spl.net.srv.Connections;

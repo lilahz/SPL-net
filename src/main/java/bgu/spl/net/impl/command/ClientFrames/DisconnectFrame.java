@@ -21,9 +21,9 @@ public class DisconnectFrame implements ClientFrame {
     public void execute(int connectionId) {
         User tmpUser = bookClub.getUser(connectionId);
         tmpUser.unSubscribeAll();
-        bookClub.removeUser(tmpUser);
+        tmpUser.logout();
         connections.send(connectionId, new ReceiptFrame(receiptId));
-
+        connections.disconnect(connectionId);
     }
 
     @Override

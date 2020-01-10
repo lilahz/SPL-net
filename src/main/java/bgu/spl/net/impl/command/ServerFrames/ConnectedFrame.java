@@ -14,7 +14,7 @@ public class ConnectedFrame implements ServerFrame {
     }
 
     public String toFrame() {
-        String output = "CONNECTED\nversion:" + version + "\n" + '\u0000';
+        String output = "CONNECTED\nversion:" + version + "\n\n" + '\u0000';
         StompMessagingProtocolImp.setUserActive();
         return output;
     }
