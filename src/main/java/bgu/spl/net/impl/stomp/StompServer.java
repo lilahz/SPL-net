@@ -5,6 +5,8 @@ import bgu.spl.net.srv.BaseServer;
 import bgu.spl.net.srv.MessageEncoderDecoderImp;
 import bgu.spl.net.srv.Server;
 
+import java.text.RuleBasedCollator;
+
 public class StompServer {
 
     public static void main(String[] args) {
@@ -20,7 +22,6 @@ public class StompServer {
         }
 
         else if (args[1].equals("reactor")) {
-
             Server server = Server.reactor(
                     Runtime.getRuntime().availableProcessors(),
                     port,

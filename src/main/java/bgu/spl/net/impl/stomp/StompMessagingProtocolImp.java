@@ -31,11 +31,8 @@ public class StompMessagingProtocolImp<T> implements StompMessagingProtocol<T> {
             ((ClientFrame) message).setConnections((ConnectionsImp<String>) connections);
             ((ClientFrame) message).execute(connectionId);
         }
-        if (message instanceof ErrorFrame)
+        if (message instanceof ErrorFrame | message instanceof DisconnectFrame)
             shouldTerminate = true;
-//        if (message instanceof DisconnectFrame ){
-//            //TODO : implement this.
-//        }
     }
 
     @Override

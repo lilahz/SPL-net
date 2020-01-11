@@ -42,7 +42,8 @@ public class ConnectionsImp<T> implements Connections {
     public void send(String channel, Object msg) {
         if (bookClub.getUsersByGenre(channel) != null) {
             for (User tmp : bookClub.getUsersByGenre(channel)) {
-                send(tmp.getUserId(), msg);
+                if (tmp.isActive())
+                    send(tmp.getUserId(), msg);
             }
         }
     }
@@ -56,7 +57,8 @@ public class ConnectionsImp<T> implements Connections {
     @Override
     public void disconnect(int connectionId) {
         try {
-            connections.get(connectionId).close();
+            if (connections.get(connectionId) instanceof BlockingConnectionHandler)
+                connections.get(connectionId).close();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,7 @@
 package bgu.spl.net.impl.command.ClientFrames;
 
 import bgu.spl.net.impl.command.ServerFrames.ReceiptFrame;
+import bgu.spl.net.srv.BlockingConnectionHandler;
 import bgu.spl.net.srv.BookClub;
 import bgu.spl.net.srv.ConnectionsImp;
 import bgu.spl.net.srv.User;
@@ -22,6 +23,7 @@ public class DisconnectFrame implements ClientFrame {
         User tmpUser = bookClub.getUser(connectionId);
         tmpUser.unSubscribeAll();
         tmpUser.logout();
+        bookClub.exitAllGenres(tmpUser);
         connections.send(connectionId, new ReceiptFrame(receiptId));
         connections.disconnect(connectionId);
     }

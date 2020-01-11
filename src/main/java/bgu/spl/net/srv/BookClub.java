@@ -44,14 +44,11 @@ public class BookClub {
         users.add(newUser);
     }
 
-    public void removeUser(User user) {
+    public void exitAllGenres(User user) {
         // Remove the user from each genre list
         for (String genre : usersPerGenre.keySet()) {
             usersPerGenre.get(genre).remove(user);
         }
-
-        // Remove the user from the users list
-        users.remove(user);
     }
 
     public void joinGenre(String genre, User user) {

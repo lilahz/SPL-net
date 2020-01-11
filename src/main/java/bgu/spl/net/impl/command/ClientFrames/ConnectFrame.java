@@ -38,7 +38,6 @@ public class ConnectFrame implements ClientFrame {
             // If the password does not match
             else {
                 connections.send(connectionId, new ErrorFrame("Wrong password"));
-//                user.logout();
             }
         }
         // If user does not exist
