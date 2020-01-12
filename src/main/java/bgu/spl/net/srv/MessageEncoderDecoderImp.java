@@ -33,10 +33,7 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
 
     @Override
     public byte[] encode(Object message) {
-        //TODO the message doesnt sent good to send in NBCH
         String msg = ((ServerFrame)message).toFrame();
-        System.out.println("sending: ");
-        System.out.println(msg);
         return (msg).getBytes();
     }
 

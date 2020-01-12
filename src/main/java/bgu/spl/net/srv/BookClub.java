@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BookClub {
-    private Map<String, List<User>> usersPerGenre; // < genre , users >
+    private ConcurrentHashMap<String, List<User>> usersPerGenre; // < genre , users >
     private List<User> users;
 
     private BookClub() {
@@ -25,45 +25,56 @@ public class BookClub {
     }
 
     public User getUser(String userName) {
-        for (User user : users) {
-            if (user.getUserName().equals(userName))
-                return user;
+        synchronized (users) {
+            for (User user : users) {
+                if (user.getUserName().equals(userName))
+                    return user;
+            }
+            return null;
         }
-        return null;
     }
 
     public User getUser(int userId) {
-        for (User user : users) {
-            if (user.getUserId() == userId)
-                return user;
+        synchronized (users) {
+            for (User user : users) {
+                if (user.getUserId() == userId)
+                    return user;
+            }
         }
         return null;
     }
 
     public void addUser(User newUser) {
-        users.add(newUser);
+        synchronized (users) {
+            users.add(newUser);
+        }
     }
 
     public void exitAllGenres(User user) {
         // Remove the user from each genre list
         for (String genre : usersPerGenre.keySet()) {
-            usersPerGenre.get(genre).remove(user);
+            synchronized (usersPerGenre.get(genre)) {
+                usersPerGenre.get(genre).remove(user);
+            }
         }
     }
 
     public void joinGenre(String genre, User user) {
-        //TODO edited this
-        if (usersPerGenre.get(genre) == null){
-            usersPerGenre.put(genre, new LinkedList<>());
+        synchronized (usersPerGenre) {
+            usersPerGenre.putIfAbsent(genre, new LinkedList<>());
+            usersPerGenre.get(genre).add(user);
         }
-        usersPerGenre.get(genre).add(user);
     }
 
     public void exitGenre(String genre, User user) {
-        usersPerGenre.get(genre).remove(user);
+        synchronized (usersPerGenre.get(genre)) {
+            usersPerGenre.get(genre).remove(user);
+        }
     }
 
     public List<User> getUsersByGenre(String genre){
-        return usersPerGenre.get(genre);
+        synchronized (usersPerGenre) {
+            return usersPerGenre.get(genre);
+        }
     }
 }

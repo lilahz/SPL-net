@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConnectionsImp<T> implements Connections {
 
     private Map<Integer, ConnectionHandler<T>> connections;
-    private Map<Integer, User> userSubscriptions;
     BookClub bookClub = BookClub.getInstance();
 
     public ConnectionsImp() {
@@ -65,6 +64,8 @@ public class ConnectionsImp<T> implements Connections {
     }
 
     public void addConnection(int connectionId, ConnectionHandler connection) {
-        connections.put(connectionId, connection);
+        synchronized (connections) {
+            connections.put(connectionId, connection);
+        }
     }
 }

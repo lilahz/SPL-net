@@ -60,7 +60,6 @@ public class BlockingConnectionHandler<T> implements Runnable, ConnectionHandler
         if (msg != null) {
             try {
                 out.write(encdec.encode(msg));
-                System.out.println(msg);
                 out.flush();
             } catch (IOException e) {
                 e.printStackTrace();
