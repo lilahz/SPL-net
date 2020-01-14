@@ -22,8 +22,6 @@ public class MessageEncoderDecoderImp implements MessageEncoderDecoder {
         // TODO: understand which end byte use
         if (nextByte == '\u0000') {
             String msg = new String(bytes, 0, length, StandardCharsets.UTF_8);
-            if (msg.charAt(0) == '\n') //TODO : maybe we can remove \n at the encoder
-               msg = msg.substring(1);
             length = 0;
             return createFrame(msg);
         }
